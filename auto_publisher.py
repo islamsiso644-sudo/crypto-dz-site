@@ -99,6 +99,8 @@ def build_report_html(prices, dzd, now):
             mood = "يوم أخضر واضح في السوق"
         elif btc["chg"] < -1 and eth["chg"] < -1:
             mood = "يوم أحمر في السوق"
+        else:
+            mood = "حركة معتدلة في السوق"
         sentence = f"أنهى السوق {mood}، مع تغير بيتكوين {btc['chg']:+.2f}% وإيثريوم {eth['chg']:+.2f}% خلال 24 ساعة."
     else:
         sentence = "تقرير اليوم آلي بالكامل من مصادر مباشرة."
