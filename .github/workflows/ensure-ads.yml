@@ -1,0 +1,39 @@
+name: Ensure Ads Injected
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'README.md'
+  workflow_dispatch:        # تشغيل يدوي من تبويب Actions
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ads-injection
+  cancel-in-progress: false
+
+jobs:
+  inject-ads:
+    # لا يعمل على كوميتات البوت نفسه (منع حلقة التكرار)
+    if: github.actor != 'crypto-dz-bot'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Inject A-ADS ad code into ad slots
+        run: python3 inject_ads.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name  "crypto-dz-bot"
+          git config user.email "bot@crypto-dz.local"
+          git add -A
+          git diff --cached --quiet && echo "الإعلانات محقونة بالفعل — لا تغيير" || (git commit -m "آلي: ضمان حقن إعلانات A-ADS في كل الصفحات" && git push)

@@ -18,10 +18,10 @@ document.addEventListener('DOMContentLoaded', function () {
   fetch(depth + 'data/config.json')
     .then(function (r) { return r.json(); })
     .then(function (cfg) {
-      // 1) حقن كود الإعلانات في كل الخانات
+      // 1) حقن كود الإعلانات في الخانات الفارغة فقط (المعبأة ثابتًا في HTML تبقى كما هي)
       if (cfg.aads_code) {
         var code = cfg.aads_code.replace(/\\"/g, '"');
-        document.querySelectorAll('.ad-slot').forEach(function (slot) {
+        document.querySelectorAll('.ad-slot:not(.filled)').forEach(function (slot) {
           slot.classList.add('filled');
           slot.innerHTML = code;
         });

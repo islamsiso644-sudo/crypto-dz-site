@@ -215,8 +215,15 @@ table.price-table { width: 100%; border-collapse: collapse; font-size: 15px; }
   color: var(--muted); font-size: 12.5px; background: rgba(16,26,46,.5);
 }
 .ad-slot::before { content: "مساحة إعلانية"; }
-.ad-slot.filled { border: none; min-height: auto; }
+.ad-slot.filled { border: none; min-height: auto; background: none; display: block; }
 .ad-slot.filled::before { content: none; }
+/* الإعلان المعبأ: iframe يأخذ عرض الخانة بالكامل ويتنفس مع الهوامش */
+.ad-slot.filled iframe { width: 100% !important; max-width: 100%; display: block; margin: 0 auto; }
+.ad-slot.filled #frame { width: 100% !important; }
+/* على الجوال: إعلان بحجم مريح */
+@media (max-width: 600px) {
+  .ad-slot.filled iframe { min-height: 100px; }
+}
 
 /* ===== فوتر ===== */
 .site-footer {
