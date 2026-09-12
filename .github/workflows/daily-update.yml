@@ -30,9 +30,29 @@ jobs:
       - name: Re-inject A-ADS ad code
         run: python3 inject_ads.py
 
+      - name: Generate SEO files (sitemap / feed / meta)
+        run: python3 generate_seo.py
+
+      - name: Notify search engines (IndexNow + Google ping)
+        run: |
+          KEY=$(ls | grep -E '^[0-9a-f]{32}\.txt$' | head -1 | cut -d. -f1)
+          HOST=islamsiso644-sudo.github.io
+          BASE="https://$HOST/crypto-dz-site"
+          echo "مفتاح IndexNow: $KEY"
+          # IndexNow (صيغة JSON الرسمية — تبلّغ Bing/Yandex/Naver فورًا بكل الصفحات المحدّثة)
+          if [ -n "$KEY" ]; then
+            STATUS=$(curl -s -X POST "https://api.indexnow.org/IndexNow" \
+              -H "Content-Type: application/json; charset=utf-8" \
+              -d "{\"host\":\"$HOST\",\"key\":\"$KEY\",\"keyLocation\":\"$BASE/$KEY.txt\",\"urlList\":[\"$BASE/\",\"$BASE/articles/price-report.html\",\"$BASE/articles.html\",\"$BASE/feed.xml\",\"$BASE/sitemap.xml\"]}" \
+              -o /dev/null -w "%{http_code}" --max-time 20 || true)
+            echo "IndexNow: HTTP $STATUS"
+          fi
+          # ping قديم لجوجل (لا يضر)
+          curl -s "https://www.google.com/ping?sitemap=$BASE/sitemap.xml" -o /dev/null -w "Google ping: HTTP %{http_code}\n" --max-time 15 || true
+
       - name: Commit and push if changed
         run: |
           git config user.name  "crypto-dz-bot"
           git config user.email "bot@crypto-dz.local"
           git add -A
-          git diff --cached --quiet && echo "لا تغييرات اليوم — لا كوميت" || (git commit -m "آلي: تحديث تقرير الأسعار $(date -u +'%Y-%m-%d %H:%M UTC')" && git push)
+          git diff --cached --quiet && echo "لا تغييرات اليوم — لا كوميت" || (git commit -m "آلي: تحديث تقرير الأسعار + SEO $(date -u +'%Y-%m-%d %H:%M UTC')" && git push)

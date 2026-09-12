@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://islamsiso644-sudo.github.io/crypto-dz-site/sitemap.xml

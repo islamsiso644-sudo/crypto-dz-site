@@ -1,4 +1,4 @@
-name: Ensure Ads Injected
+name: Ensure Ads + SEO
 
 on:
   push:
@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  inject-ads:
+  inject-and-seo:
     # لا يعمل على كوميتات البوت نفسه (منع حلقة التكرار)
     if: github.actor != 'crypto-dz-bot'
     runs-on: ubuntu-latest
@@ -31,9 +31,12 @@ jobs:
       - name: Inject A-ADS ad code into ad slots
         run: python3 inject_ads.py
 
+      - name: Generate SEO files (sitemap / feed / meta)
+        run: python3 generate_seo.py
+
       - name: Commit and push if changed
         run: |
           git config user.name  "crypto-dz-bot"
           git config user.email "bot@crypto-dz.local"
           git add -A
-          git diff --cached --quiet && echo "الإعلانات محقونة بالفعل — لا تغيير" || (git commit -m "آلي: ضمان حقن إعلانات A-ADS في كل الصفحات" && git push)
+          git diff --cached --quiet && echo "الإعلانات وSEO محدّثة — لا تغيير" || (git commit -m "آلي: ضمان حقن إعلانات A-ADS + ملفات SEO في كل الصفحات" && git push)

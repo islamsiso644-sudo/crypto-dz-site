@@ -265,3 +265,11 @@ table.price-table { width: 100%; border-collapse: collapse; font-size: 15px; }
   .article-content, .card, .ticker { border: none; background: #fff; color: #111; }
   .article-content p, .article-content li { color: #222; }
 }
+
+/* SHARE_CSS_START */
+.share-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:24px auto;padding:14px 16px;max-width:720px;background:#f0fdfa;border:1px solid #22d3a5;border-radius:12px;font-size:14px}
+.share-label{font-weight:700;color:#0f766e;margin-inline-end:4px}
+.share-btn{display:inline-block;padding:8px 14px;border-radius:8px;text-decoration:none;font-weight:600;font-size:13px;border:none;cursor:pointer;color:#fff;transition:transform .15s,box-shadow .15s}
+.share-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.share-btn.wa{background:#25d366}.share-btn.fb{background:#1877f2}.share-btn.tw{background:#0f1419}.share-btn.tg{background:#229ed9}.share-btn.cp{background:#0f766e}
+/* SHARE_CSS_END */
